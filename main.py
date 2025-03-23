@@ -10,8 +10,7 @@ import random
 
 def welcome_user():
     '''uvitání hráče a představení hry'''
-    print(f'''Hi there!\n{znak}\nI've generated a random 4 digit number for you.
-    Let's play a bulls and cows game.\n{znak}\nEnter a number:\n{znak}'''
+    print(f'''Hi there!\n{znak}\nI've generated a random 4 digit number for you.\nLet's play a bulls and cows game.\n{znak}\nEnter a number:\n{znak}'''
     )
 
 def random_number():
@@ -27,8 +26,8 @@ def numbers_from_pc(cisla_od_PC):
     vstup = 1234
     výstup = 1,2,3,4
     '''
-    xx = list(map(int, str(cisla_od_PC)))
-    return xx
+    prevod = list(map(int, str(cisla_od_PC)))
+    return prevod
 
 def numbers_from_user(cisla_od_uzivatele):
     '''
@@ -37,8 +36,8 @@ def numbers_from_user(cisla_od_uzivatele):
     vstup = 1234
     výstup = 1,2,3,4
     '''
-    xx = list(map(int, str(cisla_od_uzivatele)))
-    return xx
+    prevod = list(map(int, str(cisla_od_uzivatele)))
+    return prevod
 
 def statistics(hadane_cislo, pocet_hadani, cas):
     '''
@@ -51,35 +50,37 @@ def statistics(hadane_cislo, pocet_hadani, cas):
         "Čas": cas
     }
 
-def bulls(ff, hh):
+def bulls(PC_nahodne, uzivatel):
     '''
     pokud uživatel uhodne jak číslo, tak jeho umístění
+    vstup - PC [1,2,0,0] uzivatel [1,0,8,9]
+    vystup - stejné číslo na prvni pozici
     '''
     soucet = 0
-    xx = str(ff)
-    dd = str(hh)
-    if xx[0] == dd[0]:
-        soucet +=1
-    elif xx[1] == dd[1]:
-        soucet += 1
-    elif xx[2] == dd[2]:
-        soucet += 1
-    elif xx[3] == dd[3]:
-        soucet += 1
-    return soucet
+    posun = 0
+    prevod_od_PC = str(PC_nahodne)
+    prevod_od_uzivatele = str(uzivatel)
+    for i in range(len(prevod_od_PC)):
+        if prevod_od_PC[int(i)] == prevod_od_uzivatele[int(i)]:
+            posun += 1
+    if soucet == 1:
+        return print(f"{soucet} bull")
+    else:
+        return print(f"{soucet} bulls")
 
 def cows(PC_nahodne, uzivatel):
     '''
     pokud uživatel uhodne pouze číslo, ale ne jeho umístění
+    vstup - PC [1,2,0,0] uzivatel [8,9,0,6]
+    vystup - soucet 1
     '''
-    a = set(PC_nahodne) & set(uzivatel)
-    b = Counter(a)
-    c = sum(b.values())
-    if c == 1:
-        print(f"{c} cow")
+    rozdil = set(PC_nahodne) & set(uzivatel)
+    objekt = Counter(rozdil)
+    soucet = sum(objekt.values())
+    if soucet == 1:
+        return print(f"{soucet} cow")
     else:
-        print(f"{c} cows")
-    return
+        return print(f"{soucet} cows")
 
 def program_body(PC_nahodne, uzivatel):
     '''
@@ -89,11 +90,16 @@ def program_body(PC_nahodne, uzivatel):
     '''
     guesses = 0
     while PC_nahodne != uzivatel:
-        guesses += 1
-        uzivatel = int(input(">>> "))
-        print(f"{cows}, {bulls}\n{znak}")
         print(nahodne)
-    print(f"Correct, you've guessed the right number\nin {guesses} guesses!\n{znak}\nThat´s amazing!")
+        guesses += 1
+        try:
+            uzivatel = int(input(">>> "))
+            if uzivatel != 4:
+                print("Jeno čtyřmístné číslo čísla")
+            print(f"{cows}, {bulls}\n{znak}")
+        except ValueError:
+            print("Jenom čiselné zanky")
+    print(f"Correct, you've guessed the right number\nin {guesses} guesses!\n{znak}\nThat´s amazing!\nTime:")
 
 start = time() # stopky - zacatek
 nahodne = random_number()
@@ -102,4 +108,3 @@ welcome_user()
 program_body(PC_nahodne=nahodne, uzivatel=numbers_from_user)
 end = time() # stopky - konec
 stopky = round(end - start,2) #výsledek jak dlouho hádal uživatel
-#statistics(hadane_cislo=nahodne, pocet_hadani=guesses, cas=stopky)
