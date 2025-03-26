@@ -11,8 +11,8 @@ import random
 
 def welcome_user():
     '''uvitání hráče a představení hry'''
-    return print(f"Hi there!\n{znak}\nI've generated a random 4 digit number for you.\n"
-    f"Let's play a bulls and cows game.\n{znak}\nEnter a number:\n{znak}")
+    return print(f"Hi there!\n{symbol}\nI've generated a random 4 digit number for you.\n"
+    f"Let's play a bulls and cows game.\n{symbol}\nEnter a number:\n{symbol}")
 
 def random_number():
     ''' vygenerování náhodného čtyřmístného čísla
@@ -20,64 +20,64 @@ def random_number():
     '''
     return random.randint(1000, 9999)
 
-def vyhodnoceni_bulls(PC, uzivatel):
+def evaluation_bulls(PC, user):
     '''
     Vyhodnoceni, jestli uživatel uhodl jak číslo tak i pozici
     uhodnutého čísla
     :param PC: nahodné číslo od PC
     :param uzivatel: hadané číslo uživatele
     '''
-    prevod_PC = list(map(int, str(PC)))
-    prevod_uzi = list(map(int, str(uzivatel)))
-    soucet_bulls = 0
-    for i in range(len(prevod_PC)):
-        if prevod_PC[int(i)] == prevod_uzi[int(i)]:
-            soucet_bulls += 1
-    if soucet_bulls == 1:
-        return print(f"{soucet_bulls} bull, ")
+    conversion_PC = list(map(int, str(PC)))
+    conversion_user = list(map(int, str(user)))
+    sum_bulls = 0
+    for i in range(len(conversion_PC)):
+        if conversion_PC[int(i)] == conversion_user[int(i)]:
+            sum_bulls += 1
+    if sum_bulls == 1:
+        return print(f"{sum_bulls} bull, ")
     else:
-        return print(f"{soucet_bulls} bulls, ")
+        return print(f"{sum_bulls} bulls, ")
 
-def vyhodnoceni_cows(PC, ff):
+def evaluation_cows(PC, user):
     '''
     Vyhodnocení uhodnutého čísla, ale nezáleží
     na jaké je pozici
     :param PC: nahodné číslo od PC
-    :param ff: hadané číslo uživatele
+    :param user: hadané číslo uživatele
     '''
-    rozdil = set(PC) & set(ff)
-    objekt = Counter(rozdil)
-    soucet = sum(objekt.values())
-    if soucet == 1:
-        return print(f"{soucet} cow")
+    difference_number = set(PC) & set(user)
+    objekt = Counter(difference_number)
+    sum_objekt = sum(objekt.values())
+    if sum_objekt == 1:
+        return print(f"{sum_objekt} cow")
     else:
-        return print(f"{soucet} cows")
+        return print(f"{sum_objekt} cows")
 
-znak = "-" * 47
+symbol = "-" * 47
 welcome_user()
-nahod = random_number()
-pokus = 0
-stopky = 0
+pc_tip = random_number()
+number_of_attempts = 0
+stopwatch = 0
 
-uhadl = True
-while (uhadl):
+guessed = True
+while (guessed):
     start = time()
-    pokus += 1
-    print(f"TEST: {nahod}")
-    xx = input(">>> ")
-    if int(xx[0]) == 0:
-        print("Číslo nesmí začínat číslem 0!")
-    elif len(xx) != 4:
-        print("Pouze čtyřciferné čísla!")
-    elif int(xx) == nahod:
-        print(f"{znak}\n>>> {nahod}\nCorrect, you've guessed the right number\n"
-              f"in {pokus} guesses!\n{znak}\nThat´s amazing!\nTime: {stopky}")
-        uhadl = False
+    number_of_attempts += 1
+    print(f"TEST: {pc_tip}")
+    user_tip = input(">>> ")
+    if int(user_tip[0]) == 0:
+        print(f"Number must not begin 0!\n{symbol}")
+    elif len(user_tip) != 4:
+        print(f"Only four-digit numbers!\n{symbol}")
+    elif int(user_tip) == pc_tip:
+        print(f"{symbol}\n>>> {guessed}\nCorrect, you've guessed the right number\n"
+              f"in {pc_tip} guesses!\n{symbol}\nThat´s amazing!\nTime: {stopwatch}")
+        guessed = False
     else:
-        vyhodnoceni_bulls(PC=nahod, uzivatel=xx)
-        print(znak)
+        evaluation_bulls(PC=pc_tip, user=user_tip)
+        print(symbol)
     end = time()
-    stopky += round(end - start, 2)
+    stopwatch += round(end - start, 2)
 
 
 
