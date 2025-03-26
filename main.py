@@ -64,12 +64,12 @@ while (uhadl):
     start = time()
     pokus += 1
     print(f"TEST: {nahod}")
-    xx = int(input(">>> "))
-    if len(str(xx)) == 3:
+    xx = input(">>> ")
+    if int(xx[0]) == 0:
         print("Číslo nesmí začínat číslem 0!")
-    elif len(str(xx)) != 4:
+    elif len(xx) != 4:
         print("Pouze čtyřciferné čísla!")
-    elif nahod == xx:
+    elif int(xx) == nahod:
         print(f"{znak}\n>>> {nahod}\nCorrect, you've guessed the right number\n"
               f"in {pokus} guesses!\n{znak}\nThat´s amazing!\nTime: {stopky}")
         uhadl = False
