@@ -68,8 +68,14 @@ def stopwatch(end, start):
     return round(end - start, 2)
 
 def user_duplicita(user):
+    '''
+    vyhodnoceni, jestli uživatel nezadává stejné čísla
+    v jednom tipovaní
+    :param user: tipované číslo uživatele
+    :return: vypíše čísla, která jsou duplicitní
+    '''
     table = set()
-    duplicate_number = []
+    duplicate_number = list()
     for number in str(user):
         if number in table:
             duplicate_number.append(number)
