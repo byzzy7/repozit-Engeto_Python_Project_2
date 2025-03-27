@@ -79,10 +79,10 @@ def user_duplicita(user):
     for number in str(user):
         if number in table:
             duplicate_number.append(number)
+            return print(f"You used a duplicate number {duplicate_number}")
         else:
             table.add(number)
-    return print(f"You used a duplicate number {duplicate_number}")
-
+    
 symbol = "-" * 47 # oddělovací čárka
 welcome_user() # uvitání hráče
 pc_tip = random_number() # náhodné číslo od PC
@@ -99,7 +99,7 @@ while guessed:
         user_tip = input(">>> ")
         user_duplicita(user=user_tip)
         if int(user_tip[0]) == 0:
-            print(f"Number must not begin 0!\n{symbol}")
+            print(f"Number cannot begin with 0!\n{symbol}")
         elif len(user_tip) != 4:
             print(f"Only four-digit numbers!\n{symbol}")
         elif int(user_tip) == pc_tip:
@@ -112,4 +112,4 @@ while guessed:
             evaluation_bulls(PC=pc_tip, user=user_tip), evaluation_cows(PC=pc_tip, user=numbers_without_bulls)
             print(symbol)
     except ValueError:
-        print("Numeric only!")
+        print("Only numbers!")
