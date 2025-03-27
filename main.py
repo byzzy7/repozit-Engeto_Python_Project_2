@@ -12,13 +12,15 @@ import random
 def welcome_user():
     '''uvitání hráče a představení hry'''
     return print(f"Hi there!\n{symbol}\nI've generated a random 4 digit number for you.\n"
-    f"Let's play a bulls and cows game.\n{symbol}\nEnter a number:\n{symbol}")
+                f"Let's play a bulls and cows game.\n{symbol}\nEnter a number:\n{symbol}")
 
 def random_number():
     ''' vygenerování náhodného čtyřmístného čísla
-    a nesmí začínat 0
+    a nesmí začínat 0.
+    :return - vraci vygenerované číslo bez duplicitních čísel
     '''
-    return random.randint(1000, 9999)
+    generation = random.sample(range(1, 9),4)
+    return ''.join(str(x) for x in generation)
 
 def evaluation_bulls(PC, user):
     '''
@@ -26,6 +28,7 @@ def evaluation_bulls(PC, user):
     uhodnutého čísla
     :param PC: nahodné číslo od PC
     :param uzivatel: hadané číslo uživatele
+    :param numbers_without_bulls: vymění číslo za X, když je shodné číslo a pozice
     '''
     conversion_PC = list(map(int, str(PC)))
     conversion_user = list(map(int, str(user)))
@@ -33,6 +36,9 @@ def evaluation_bulls(PC, user):
     for i in range(len(conversion_PC)):
         if conversion_PC[int(i)] == conversion_user[int(i)]:
             sum_bulls += 1
+            numbers_without_bulls.append("X")
+        else:
+            numbers_without_bulls.append(conversion_user[int(i)])
     if sum_bulls == 1:
         return print(f"{sum_bulls} bull, ")
     else:
@@ -45,7 +51,7 @@ def evaluation_cows(PC, user):
     :param PC: nahodné číslo od PC
     :param user: hadané číslo uživatele
     '''
-    difference_number = set(PC) & set(user)
+    difference_number = set(str(PC)) & set(str(user))
     objekt = Counter(difference_number)
     sum_objekt = sum(objekt.values())
     if sum_objekt == 1:
@@ -53,32 +59,43 @@ def evaluation_cows(PC, user):
     else:
         return print(f"{sum_objekt} cows")
 
-symbol = "-" * 47
-welcome_user()
-pc_tip = random_number()
-number_of_attempts = 0
-stopwatch = 0
+def stopwatch(end, start):
+    '''
+    :param end: konec času
+    :param start: začátek času
+    :return: čas za jak dlouho uhodl/a číslo
+    '''
+    return round(end - start, 2)
+
+def history():
+    pass
+
+symbol = "-" * 47 # oddělovací čárka
+welcome_user() # uvitání hráče
+pc_tip = random_number() # náhodné číslo od PC
+number_of_attempts = 0 # počet pokusů
+numbers_without_bulls = [] # čísla bez bulls
+start = time() # začátek času
+end = 0 # konec času
 
 guessed = True
-while (guessed):
-    start = time()
+while guessed:
     number_of_attempts += 1
     print(f"TEST: {pc_tip}")
-    user_tip = input(">>> ")
-    if int(user_tip[0]) == 0:
-        print(f"Number must not begin 0!\n{symbol}")
-    elif len(user_tip) != 4:
-        print(f"Only four-digit numbers!\n{symbol}")
-    elif int(user_tip) == pc_tip:
-        print(f"{symbol}\n>>> {guessed}\nCorrect, you've guessed the right number\n"
-              f"in {pc_tip} guesses!\n{symbol}\nThat´s amazing!\nTime: {stopwatch}")
-        guessed = False
-    else:
-        evaluation_bulls(PC=pc_tip, user=user_tip)
-        print(symbol)
-    end = time()
-    stopwatch += round(end - start, 2)
-
-
-
-
+    try:
+        user_tip = input(">>> ")
+        if int(user_tip[0]) == 0:
+            print(f"Number must not begin 0!\n{symbol}")
+        elif len(user_tip) != 4:
+            print(f"Only four-digit numbers!\n{symbol}")
+        elif int(user_tip) == pc_tip:
+            print(f"Correct, you've guessed the right number\n"
+                 f"in {number_of_attempts} guesses!\n{symbol}\nThat´s amazing!")
+            end += time()
+            print(f"Time: {stopwatch(start=start, end=end)}")
+            guessed = False
+        else:
+            evaluation_bulls(PC=pc_tip, user=user_tip), evaluation_cows(PC=pc_tip, user=numbers_without_bulls)
+            print(symbol)
+    except ValueError:
+        print("Numeric only!")
