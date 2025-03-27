@@ -67,8 +67,15 @@ def stopwatch(end, start):
     '''
     return round(end - start, 2)
 
-def history():
-    pass
+def user_duplicita(user):
+    table = set()
+    duplicate_number = []
+    for number in str(user):
+        if number in table:
+            duplicate_number.append(number)
+        else:
+            table.add(number)
+    return print(f"You used a duplicate number {duplicate_number}")
 
 symbol = "-" * 47 # oddělovací čárka
 welcome_user() # uvitání hráče
@@ -84,6 +91,7 @@ while guessed:
     print(f"TEST: {pc_tip}")
     try:
         user_tip = input(">>> ")
+        user_duplicita(user=user_tip)
         if int(user_tip[0]) == 0:
             print(f"Number must not begin 0!\n{symbol}")
         elif len(user_tip) != 4:
