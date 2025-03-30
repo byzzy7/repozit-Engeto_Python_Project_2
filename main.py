@@ -19,16 +19,20 @@ def random_number():
     a nesmí začínat 0.
     :return - vraci vygenerované číslo bez duplicitních čísel
     '''
-    generation = random.sample(range(1, 9),4)
-    return ''.join(str(x) for x in generation)
+    generation = random.sample(range(0, 9), 4)
+    if generation[0] == 0:
+        random.sample(range(0, 9), 4)
+    else:
+        return ''.join(str(x) for x in generation)
 
-def evaluation_bulls(PC, user):
+def evaluation_bulls_cows(PC, user):
     '''
     Vyhodnoceni, jestli uživatel uhodl jak číslo tak i pozici
     uhodnutého čísla
     :param PC: nahodné číslo od PC
     :param uzivatel: hadané číslo uživatele
-    :param numbers_without_bulls: vymění číslo za X, když je shodné číslo a pozice
+    :param sum_bulls = když je shodné číslo a pozice
+    :param sum_cows = když je shodné číslo, ale ne pozice
     '''
     conversion_PC = list(map(int, str(PC)))
     conversion_user = list(map(int, str(user)))
@@ -36,28 +40,19 @@ def evaluation_bulls(PC, user):
     for i in range(len(conversion_PC)):
         if conversion_PC[int(i)] == conversion_user[int(i)]:
             sum_bulls += 1
-            numbers_without_bulls.append("X")
-        else:
-            numbers_without_bulls.append(conversion_user[int(i)])
-    if sum_bulls == 1:
-        return print(f"{sum_bulls} bull, ")
-    else:
-        return print(f"{sum_bulls} bulls, ")
-
-def evaluation_cows(PC, user):
-    '''
-    Vyhodnocení uhodnutého čísla, ale nezáleží
-    na jaké je pozici
-    :param PC: nahodné číslo od PC
-    :param user: hadané číslo uživatele
-    '''
     difference_number = set(str(PC)) & set(str(user))
-    objekt = Counter(difference_number)
-    sum_objekt = sum(objekt.values())
-    if sum_objekt == 1:
-        return print(f"{sum_objekt} cow")
+    cows = Counter(difference_number)
+    sum_cows = sum(cows.values())
+    cow_without_bull = int(sum_cows) - int(sum_bulls)
+    if sum_bulls != 0:
+        bull = "bulls"
     else:
-        return print(f"{sum_objekt} cows")
+        bull = "bull"
+    if sum_cows != 0:
+        cow = "cows"
+    else:
+        cow = "cow"
+    return print(f"{sum_bulls} {bull}, {cow_without_bull} {cow}")
 
 def stopwatch(end, start):
     '''
@@ -65,7 +60,7 @@ def stopwatch(end, start):
     :param start: začátek času
     :return: čas za jak dlouho uhodl/a číslo
     '''
-    return round(end - start, 2)
+    return round(end - start)
 
 def user_duplicita(user):
     '''
@@ -75,11 +70,11 @@ def user_duplicita(user):
     :return: vypíše čísla, která jsou duplicitní
     '''
     table = set()
-    duplicate_number = list()
+    duplicate_number = []
     for number in str(user):
         if number in table:
             duplicate_number.append(number)
-            return print(f"You used a duplicate number {duplicate_number}")
+            return print(f"You used a duplicate number {duplicate_number}!")
         else:
             table.add(number)
     
@@ -87,7 +82,6 @@ symbol = "-" * 47 # oddělovací čárka
 welcome_user() # uvitání hráče
 pc_tip = random_number() # náhodné číslo od PC
 number_of_attempts = 0 # počet pokusů
-numbers_without_bulls = [] # čísla bez bulls
 start = time() # začátek času
 end = 0 # konec času
 
@@ -102,14 +96,14 @@ while guessed:
             print(f"Number cannot begin with 0!\n{symbol}")
         elif len(user_tip) != 4:
             print(f"Only four-digit numbers!\n{symbol}")
-        elif int(user_tip) == pc_tip:
+        elif int(user_tip) == int(pc_tip):
             print(f"Correct, you've guessed the right number\n"
                  f"in {number_of_attempts} guesses!\n{symbol}\nThat´s amazing!")
             end += time()
-            print(f"Time: {stopwatch(start=start, end=end)}")
+            print(f"Time: {stopwatch(start=start, end=end)} s")
             guessed = False
         else:
-            evaluation_bulls(PC=pc_tip, user=user_tip), evaluation_cows(PC=pc_tip, user=numbers_without_bulls)
+            evaluation_bulls_cows(PC=pc_tip, user=user_tip)
             print(symbol)
     except ValueError:
         print("Only numbers!")
