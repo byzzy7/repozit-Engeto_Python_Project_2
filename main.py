@@ -21,7 +21,7 @@ def random_number():
     '''
     generation = random.sample(range(0, 9), 4)
     if generation[0] == 0:
-        random.sample(range(0, 9), 4)
+        random.sample(range(1, 9), 4)
     else:
         return ''.join(str(x) for x in generation)
 
@@ -84,6 +84,7 @@ pc_tip = random_number() # náhodné číslo od PC
 number_of_attempts = 0 # počet pokusů
 start = time() # začátek času
 end = 0 # konec času
+
 
 guessed = True
 while guessed:
