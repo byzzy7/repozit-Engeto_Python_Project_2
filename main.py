@@ -130,13 +130,16 @@ if __name__ == '__main__':
                 else:
                     bull = ""
                 # odečtení cow od bull, aby nebylo zdvojené cow.
-                rozdil = evaluation_cows(PC=pc_tip, user=user_tip, bull=evaluation_bulls(PC=pc_tip, user=user_tip))
-                if rozdil == 1:
+                if int(evaluation_cows(
+                    PC=pc_tip, user=user_tip,
+                    bull=evaluation_bulls(PC=pc_tip, user=user_tip))) == 1:
                     cow = "s"
                 else:
                     cow = ""
                 print(f"{evaluation_bulls(PC=pc_tip, user=user_tip)} bull{bull},"
-                      f" {rozdil} cow{cow}")
+                      f" {evaluation_cows(
+                    PC=pc_tip, user=user_tip,
+                    bull=evaluation_bulls(PC=pc_tip, user=user_tip))} cow{cow}")
                 print(symbol)
         except ValueError:
             #oznámí uživateli, že nezadal číslo
