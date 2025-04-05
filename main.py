@@ -36,7 +36,7 @@ def evaluation_bulls(PC: str, user: str) -> int:
     :param PC: nahodné číslo od PC
     :param uzivatel: hadané číslo uživatele
     :param sum_bulls = když je shodné číslo a pozice
-    pc [1,2,3,4] user [1,2,9,6] = 1,2
+    pc [1,2,3,4] user [1,2,9,6] = "1","2"
     '''
     conversion_PC = list(map(int, str(PC)))
     conversion_user = list(map(int, str(user)))
@@ -47,19 +47,20 @@ def evaluation_bulls(PC: str, user: str) -> int:
             sum_bulls += 1
     return sum_bulls
 
-def evaluation_cows(PC: str, user: str) -> int:
+def evaluation_cows(PC: str, user: str, bull: int) -> int:
     '''
     vyhledaní stejnéjo čísel
     :param PC: nahodné číslo od PC
     :param user: hadané číslo uživatele
     :return: když je shodné číslo, ale ne pozice
-    pc [1,2,3,4] user [6,9,1,7] = 1
+    pc [1,2,3,4] user [6,9,1,7] = "1"
     '''
-    # vyhledaní stejnéjo čísel
-    # mezi pc_tip a user, ale nejsou na stejné pozici
+    # vyhledaní stejného čísla
     difference_number = set(str(PC)) & set(str(user))
     cows = Counter(difference_number)
-    sum_cows = sum(cows.values())
+    #odečtení bull. aby se vyřadilo číslo na stejne pozici
+    #pc[1,2,3,4] user [1,4,9,9] = "1","4" - "1"
+    sum_cows = sum(cows.values()) - bull
     return sum_cows
 
 def stopwatch(end: float, start: float) -> float:
@@ -129,7 +130,7 @@ if __name__ == '__main__':
                 else:
                     bull = ""
                 # odečtení cow od bull, aby nebylo zdvojené cow.
-                rozdil = evaluation_cows(PC=pc_tip, user=user_tip) - evaluation_bulls(PC=pc_tip, user=user_tip)
+                rozdil = evaluation_cows(PC=pc_tip, user=user_tip, bull=evaluation_bulls(PC=pc_tip, user=user_tip))
                 if rozdil == 1:
                     cow = "s"
                 else:
