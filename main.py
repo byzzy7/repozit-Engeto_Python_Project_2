@@ -22,12 +22,12 @@ def random_number():
     :return - vraci vygenerované číslo bez duplicitních čísel
     '''
     #nahode čtyřmistné číslo
-    generation = random.sample(range(0, 9), 4)
-    #když náhodné číslo začína 0,
-    # program znovu vygeneruje nové číslo
-    while generation[0] == 0:
+    while True:
         generation = random.sample(range(0, 9), 4)
-    return ''.join(str(x) for x in generation)
+        if generation[0] > 0:
+            return ''.join(str(x) for x in generation)
+        else:
+            continue
 
 def evaluation_bulls(PC: str, user: str) -> int:
     '''
@@ -56,7 +56,7 @@ def evaluation_cows(PC: str, user: str, bull: int) -> int:
     pc [1,2,3,4] user [6,9,1,7] = "1"
     '''
     # vyhledaní stejného čísla
-    difference_number = set(str(PC)) & set(str(user))
+    difference_number = set(PC) & set(user)
     cows = Counter(difference_number)
     #odečtení bull. aby se vyřadilo číslo na stejne pozici
     #pc[1,2,3,4] user [1,4,9,9] = "1","4" - "1"
@@ -89,25 +89,38 @@ def user_duplicita(user: str) -> True:
         else:
             table.add(number)
 
+def historie(pokus: str, cislo: str):
+    '''
+    shromažďuje data pro overview_of_numbers
+    pokus = počet pokusu hadani
+    cislo = tipvane cisla
+    '''
+    overview_of_numbers[pokus] = [cislo]
+
 symbol = "-" * 47 # oddělovací čárka
 welcome_user() # uvitání hráče
 pc_tip = random_number() # náhodné číslo od PC
 number_of_attempts = 0 # počet pokusů
 start_time = time() # začátek času
+overview_of_numbers = {} #pamět tipovanych cisel
 
 if __name__ == '__main__':
     guessed = True
     while guessed:
         # připočitá bod při každém špatném pokusu
         number_of_attempts += 1
-        print(f"TEST: {pc_tip}")
         try:
             user_tip = input(">>> ")
+            #data pro historii
+            historie(cislo=user_tip, pokus=number_of_attempts)
+            #data pro bull
+            bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
+            #data pro cow
+            cow_data = evaluation_cows(PC=pc_tip, user=user_tip,
+                        bull=evaluation_bulls(PC=pc_tip, user=user_tip))
             #oznámí, jestli uživatel zadal duplicitní čísla
             if user_duplicita(user=user_tip):
                 print("duplicity number!")
-            else:
-                print("")
             #jestli uživatel nezadal 0 na začátku čísla
             if int(user_tip[0]) == 0:
                 print(f"Number cannot begin with 0!\n{symbol}")
@@ -122,24 +135,21 @@ if __name__ == '__main__':
                 end_time = time() # konec času
                 #časomíra
                 print(f"Time: {stopwatch(start=start_time, end=end_time)} s")
+                #historie tipovanych cisel
+                print(f"Historie: {overview_of_numbers}")
                 guessed = False # ukončení opakování, když user uhodne
             else:
-                #vypíše počet bull a cow
-                if int(evaluation_bulls(PC=pc_tip, user=user_tip)) == 1:
+                #vypíše počet bull
+                if int(bull_data) == 1:
                     bull = "s"
                 else:
                     bull = ""
-                # odečtení cow od bull, aby nebylo zdvojené cow.
-                if int(evaluation_cows(
-                    PC=pc_tip, user=user_tip,
-                    bull=evaluation_bulls(PC=pc_tip, user=user_tip))) == 1:
+                # vypíše počet cows
+                if int(cow_data) == 1:
                     cow = "s"
                 else:
                     cow = ""
-                print(f"{evaluation_bulls(PC=pc_tip, user=user_tip)} bull{bull},"
-                      f" {evaluation_cows(
-                    PC=pc_tip, user=user_tip,
-                    bull=evaluation_bulls(PC=pc_tip, user=user_tip))} cow{cow}")
+                print(f"{bull_data} bull{bull}, {cow_data} cow{cow}")
                 print(symbol)
         except ValueError:
             #oznámí uživateli, že nezadal číslo
