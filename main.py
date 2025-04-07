@@ -52,7 +52,6 @@ def evaluation_cows(PC: str, user: str, bull: int) -> int:
     vyhledaní stejnéjo čísel
     :param PC: nahodné číslo od PC
     :param user: hadané číslo uživatele
-    :return: když je shodné číslo, ale ne pozice
     pc [1,2,3,4] user [6,9,1,7] = "1"
     '''
     # vyhledaní stejného čísla
@@ -76,7 +75,7 @@ def user_duplicita(user: str) -> True:
     vyhodnoceni, jestli uživatel nezadává stejné čísla
     v jednom tipovaní
     :param user: tipované číslo uživatele
-    :return: vypíše čísla, která jsou duplicitní
+    :return: True, jestli je číslo duplicitní
     '''
     #vyřezené čísel
     table = set()
