@@ -31,7 +31,7 @@ def evaluation_bulls(PC: str, user: str) -> int:
     '''
     Vyhodnoceni, jestli uživatel uhodl jak číslo tak i pozici
     uhodnutého čísla
-    pc [1,2,3,4] user [1,2,9,6] = [X,X,3,4]
+    pc [1,2,3,4] user [1,2,9,6] = [1,2]
     '''
     conversion_PC = list(map(int, str(PC)))
     conversion_user = list(map(int, str(user)))
