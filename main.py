@@ -43,7 +43,7 @@ def evaluation_bulls(PC: str, user: str) -> int:
                 sum_bulls += 1
     return sum_bulls
 
-def evaluation_cows(PC: str, user: list) -> int:
+def evaluation_cows(PC: str, user: list, bull: int) -> int:
     '''
     vyhledaní stejnéjo čísel
     pc [1,2,3,4] user [6,9,1,7] = [1]
@@ -51,8 +51,7 @@ def evaluation_cows(PC: str, user: list) -> int:
     # vyhledaní stejného čísla
     difference_number = set(str(PC)) & set(list(user))
     sum_cows = sum(Counter(difference_number).values())
-    result = int(sum_cows) - int(evaluation_bulls
-                             (PC=pc_tip, user=user_tip))
+    result = int(sum_cows) - int(bull)
     return result
 
 def stopwatch(end: float, start: float) -> float:
@@ -115,10 +114,11 @@ if __name__ == '__main__':
 while True:
     # připočitá bod při každém špatném pokusu
     number_of_attempts += 1
-    print(pc_tip)
     # Tip od uživatele
     user_tip = input(">>> ")
     #oznámí, jestli uživatel zadal duplicitní čísla
+    bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
+    cow_dala = evaluation_cows(PC=pc_tip, user=user_tip, bull=bull_data)
     if user_duplicita(user=user_tip):
         print(f"duplicity number!")
     #jestli uživatel nezadal 0 na začátku čísla
@@ -141,6 +141,5 @@ while True:
         print(f"History: {overview_of_numbers}")
         break # ukončení opakování, když user uhodne
     history(attempt=number_of_attempts, number=user_tip)
-    print(evaluation_s(evaluation_bulls(PC=pc_tip, user=user_tip), 
-        evaluation_cows(PC=pc_tip, user=user_tip)))
+    print(evaluation_s(bull_data, cow_dala))
     print(symbol)       
