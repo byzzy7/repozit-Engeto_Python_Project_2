@@ -133,7 +133,6 @@ if __name__ == '__main__':
 while True:
     # připočitá bod při každém špatném pokusu
     number_of_attempts += 1
-    print(f"pc tip: {pc_tip}")
     try:
         # Tip od uživatele
         user_tip = input(">>> ")
