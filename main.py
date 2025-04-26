@@ -43,7 +43,7 @@ def evaluation_bulls(PC: str, user: str) -> int:
                 sum_bulls += 1
     return sum_bulls
 
-def evaluation_cows(PC: str, user: list, bull: int) -> int:
+def evaluation_cows(PC: str, user: str, bull: int) -> int:
     '''
     vyhledaní stejnéjo čísel
     pc [1,2,3,4] user [6,9,1,7] = [1]
@@ -62,8 +62,7 @@ def stopwatch(end: float, start: float) -> float:
 
 def user_duplicita(user: str) -> True:
     '''
-    vyhodnoceni, jestli uživatel nezadává stejné čísla
-    v jednom tipovaní
+    kontrola duplicitních čísel
     :param user: tipované číslo uživatele
     :return: True, jestli je číslo duplicitní
     '''
@@ -78,11 +77,11 @@ def user_duplicita(user: str) -> True:
         else:
             table.add(number)
 
-def history(attempt: str, number: str) -> dict:
+def history(attempt: str, number: str):
     '''
     shromažďuje data pro overview_of_numbers
-    attempt = počet pokusu hadani
-    number = tipvane cisla
+    attempt = počet pokusu
+    number = tipvaná čísla
     '''
     overview_of_numbers[attempt] = [number]
 
@@ -99,8 +98,29 @@ def evaluation_s(bull_data: int, cow_data: int):
         cow = ""
     return f"{bull_data} bull{bull}, {cow_data} cow{cow}"
 
+def evaluation_tip():
+    # kontrola - čísla nezačíná 0
+    if int(user_tip[0]) == 0:
+        print(f"Number cannot begin with 0!")
+    # kontrola - duplicitníchnčísel
+    elif user_duplicita(user=user_tip):
+        print(f"duplicity number!")
+    # kontrola - čtyřmístné číslo
+    elif len(user_tip) != 4:
+        print(f"Only four-digit numbers!")
+    # kontrola - uživatel nezadal tipované číslo
+    elif int(user_tip) == int(pc_tip):
+        print(f"Correct, you've guessed the right number\n"
+              f"in {number_of_attempts} guesses!\n"
+              f"{symbol}\nThat´s amazing!")
+        end_time = time()  # konec času
+        # Čas za jak dlouho se uhadlo číslo
+        print(f"Time: {stopwatch(start=start_time,
+                                 end=end_time)} s")
+        # Historie tipovaných čísel
+        print(f"History: {overview_of_numbers}")
+        exit()
 
- 
 symbol = "-" * 47 # oddělovací čárka
 pc_tip = random_number() # náhodné číslo od PC
 number_of_attempts = 0 # počet pokusů
@@ -110,36 +130,20 @@ overview_of_numbers = {} #pamět tipovanych cisel
 if __name__ == '__main__':
     welcome_user() # uvitání hráče
 
-
 while True:
     # připočitá bod při každém špatném pokusu
     number_of_attempts += 1
-    # Tip od uživatele
-    user_tip = input(">>> ")
-    #oznámí, jestli uživatel zadal duplicitní čísla
-    bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
-    cow_dala = evaluation_cows(PC=pc_tip, user=user_tip, bull=bull_data)
-    if user_duplicita(user=user_tip):
-        print(f"duplicity number!")
-    #jestli uživatel nezadal 0 na začátku čísla
-    elif not user_tip.isdigit():
-        print(f"Only numbers!")
-    elif int(user_tip[0]) == 0:
-        print(f"Number cannot begin with 0!")
-    # jestli dal jenom čtyřmístné číslo
-    elif len(user_tip) != 4:
-        print(f"Only four-digit numbers!")
-    #jestli uživatel nezadal tipované číslo
-    elif int(user_tip) == int(pc_tip):
-        print(f"Correct, you've guessed the right number\n"
-                f"in {number_of_attempts} guesses!\n"
-                f"{symbol}\nThat´s amazing!")
-        end_time = time() # konec času
-        # Čas za jak dlouho se uhadlo číslo
-        print(f"Time: {stopwatch(start=start_time, end=end_time)} s")
-        # Historie tipovaných čísel
-        print(f"History: {overview_of_numbers}")
-        break # ukončení opakování, když user uhodne
-    history(attempt=number_of_attempts, number=user_tip)
-    print(evaluation_s(bull_data, cow_dala))
-    print(symbol)       
+    print(f"pc tip: {pc_tip}")
+    try:
+        # Tip od uživatele
+        user_tip = input(">>> ")
+        # byhodnocení tipu
+        evaluation_tip()
+        bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
+        cow_dala = evaluation_cows(PC=pc_tip, user=user_tip,
+                                   bull=bull_data)
+        # historie tipovaných čísel
+        history(attempt=number_of_attempts, number=user_tip)
+        print(f"{evaluation_s(bull_data, cow_dala)}\n{symbol}")
+    except ValueError:
+        print(f"Only numbers!\n{symbol}")
