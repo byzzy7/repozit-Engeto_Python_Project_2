@@ -86,12 +86,12 @@ def history(attempt: str, number: str):
     overview_of_numbers[attempt] = [number]
 
 def evaluation_s(bull_data: int, cow_data: int):
-    #vypíše počet bull
+    # řeší množné číslo pro bull
     if bull_data == 1:
         bull = "s"
     else:
         bull = ""
-    # vypíše počet cows
+    # řeší množné číslo pro cow
     if cow_data == 1:
         cow = "s"
     else:
