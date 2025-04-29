@@ -86,7 +86,7 @@ def history(attempt: str, number: str):
     overview_of_numbers[attempt] = [number]
 
 def singular_or_plural(bull_data: int, cow_data: int):
-    # řeší množné číslo pro bull
+    '''řeší množné číslo pro bull'''
     if bull_data == 1:
         bull = "s"
     else:
@@ -99,22 +99,22 @@ def singular_or_plural(bull_data: int, cow_data: int):
     return f"{bull_data} bull{bull}, {cow_data} cow{cow}"
 
 def check_zero(user_tip: str):
-    #kontrola - číslo nezačíná nulou
+    '''číslo nezačíná nulou'''
     if int(user_tip[0]) == 0:
         return True
 
 def only_four_digits(user_tip: str):
-    # kontrola - čtyřmístné číslo
+    '''čtyřmístné číslo'''
     if len(user_tip) != 4:
         return True
 
 def number_is_missing(user_tip: str):
-    #prazdné pole
+    '''prazdné pole'''
     if user_tip == "":
         return True
 
 def list_of_guessed_numbers(user_tip: str, pc_tip: str):
-    # kontrola - uživatel nezadal tipované číslo
+    '''kontrola - uživatel nezadal tipované číslo'''
     if int(user_tip) == int(pc_tip):
         print(f"Correct, you've guessed the right number\n"
               f"in {number_of_attempts} guesses!\n"
@@ -128,6 +128,9 @@ def list_of_guessed_numbers(user_tip: str, pc_tip: str):
         exit()
 
 def main(number_of_attempts: int, pc_tip: str):
+    '''Hlavní funkce,
+    opakování dokuď uživatel neuhodné tipované číslo
+    '''
     while True:
         # připočitá bod při každém špatném pokusu
         number_of_attempts += 1
