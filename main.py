@@ -108,6 +108,11 @@ def only_four_digits(user_tip: str):
     if len(user_tip) != 4:
         return True
 
+def number_is_missing(user_tip: str):
+    #prazdné pole
+    if user_tip == "":
+        return True
+
 def list_of_guessed_numbers(user_tip: str, pc_tip: str):
     # kontrola - uživatel nezadal tipované číslo
     if int(user_tip) == int(pc_tip):
@@ -126,17 +131,19 @@ def main(number_of_attempts: int, pc_tip: str):
     while True:
         # připočitá bod při každém špatném pokusu
         number_of_attempts += 1
-        print(f"TEST: {pc_tip}")
         try:
             # Tip od uživatele
             user_tip = input(">>> ")
-            if check_zero(user_tip=user_tip):
+            if number_is_missing(user_tip=user_tip):
+                print(f"Number cannot be empty!")
+            elif check_zero(user_tip=user_tip):
                 print(f"Number cannot begin with 0!")
-            if only_four_digits(user_tip=user_tip):
+            elif only_four_digits(user_tip=user_tip):
                 print(f"Only four-digit numbers!")
-            list_of_guessed_numbers(user_tip=user_tip, pc_tip=pc_tip)
-            if user_duplicita(user=user_tip):
+            elif user_duplicita(user=user_tip):
                 print(f"Duplicity number!")
+            else:
+                list_of_guessed_numbers(user_tip=user_tip, pc_tip=pc_tip)
             # byhodnocení tipu
             bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
             cow_dala = evaluation_cows(PC=pc_tip, user=user_tip,
