@@ -85,7 +85,7 @@ def history(attempt: str, number: str):
     '''
     overview_of_numbers[attempt] = [number]
 
-def evaluation_s(bull_data: int, cow_data: int):
+def singular_or_plural(bull_data: int, cow_data: int):
     # řeší množné číslo pro bull
     if bull_data == 1:
         bull = "s"
@@ -98,18 +98,19 @@ def evaluation_s(bull_data: int, cow_data: int):
         cow = ""
     return f"{bull_data} bull{bull}, {cow_data} cow{cow}"
 
-def evaluation_tip():
-    # kontrola - čísla nezačíná 0
+def check_zero(user_tip: str):
+    #kontrola - číslo nezačíná nulou
     if int(user_tip[0]) == 0:
-        print(f"Number cannot begin with 0!")
-    # kontrola - duplicitníchnčísel
-    elif user_duplicita(user=user_tip):
-        print(f"duplicity number!")
+        return True
+
+def only_four_digits(user_tip: str):
     # kontrola - čtyřmístné číslo
-    elif len(user_tip) != 4:
-        print(f"Only four-digit numbers!")
+    if len(user_tip) != 4:
+        return True
+
+def list_of_guessed_numbers(user_tip: str, pc_tip: str):
     # kontrola - uživatel nezadal tipované číslo
-    elif int(user_tip) == int(pc_tip):
+    if int(user_tip) == int(pc_tip):
         print(f"Correct, you've guessed the right number\n"
               f"in {number_of_attempts} guesses!\n"
               f"{symbol}\nThat´s amazing!")
@@ -121,6 +122,32 @@ def evaluation_tip():
         print(f"History: {overview_of_numbers}")
         exit()
 
+def main(number_of_attempts: int, pc_tip: str):
+    while True:
+        # připočitá bod při každém špatném pokusu
+        number_of_attempts += 1
+        print(f"TEST: {pc_tip}")
+        try:
+            # Tip od uživatele
+            user_tip = input(">>> ")
+            if check_zero(user_tip=user_tip):
+                print(f"Number cannot begin with 0!")
+            if only_four_digits(user_tip=user_tip):
+                print(f"Only four-digit numbers!")
+            list_of_guessed_numbers(user_tip=user_tip, pc_tip=pc_tip)
+            if user_duplicita(user=user_tip):
+                print(f"Duplicity number!")
+            # byhodnocení tipu
+            bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
+            cow_dala = evaluation_cows(PC=pc_tip, user=user_tip,
+                                       bull=bull_data)
+            # historie tipovaných čísel
+            history(attempt=number_of_attempts, number=user_tip)
+            print(f"{singular_or_plural(bull_data, cow_dala)}\n{symbol}")
+        except ValueError:
+            print(f"Only numbers!\n{symbol}")
+
+
 symbol = "-" * 47 # oddělovací čárka
 pc_tip = random_number() # náhodné číslo od PC
 number_of_attempts = 0 # počet pokusů
@@ -129,20 +156,5 @@ overview_of_numbers = {} #pamět tipovanych cisel
 
 if __name__ == '__main__':
     welcome_user() # uvitání hráče
+    main(number_of_attempts, pc_tip) # spuštění hry
 
-while True:
-    # připočitá bod při každém špatném pokusu
-    number_of_attempts += 1
-    try:
-        # Tip od uživatele
-        user_tip = input(">>> ")
-        # byhodnocení tipu
-        evaluation_tip()
-        bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
-        cow_dala = evaluation_cows(PC=pc_tip, user=user_tip,
-                                   bull=bull_data)
-        # historie tipovaných čísel
-        history(attempt=number_of_attempts, number=user_tip)
-        print(f"{evaluation_s(bull_data, cow_dala)}\n{symbol}")
-    except ValueError:
-        print(f"Only numbers!\n{symbol}")
