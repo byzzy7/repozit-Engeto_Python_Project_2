@@ -121,7 +121,7 @@ def letter(user_tip: str):
         return True
 
 def list_of_guessed_numbers(user_tip: str, pc_tip: str):
-    '''kontrola - uživatel nezadal tipované číslo'''
+    '''kontrola - uživatel uhádl tipované číslo'''
     if int(user_tip) == int(pc_tip):
         print(f"Correct, you've guessed the right number\n"
               f"in {number_of_attempts} guesses!\n"
@@ -132,7 +132,7 @@ def list_of_guessed_numbers(user_tip: str, pc_tip: str):
                                  end=end_time)} s")
         # Historie tipovaných čísel
         print(f"History: {overview_of_numbers}")
-        exit()
+        exit() # konec hry
 
 def main(number_of_attempts: int, pc_tip: str):
     '''Hlavní funkce,
@@ -157,7 +157,7 @@ def main(number_of_attempts: int, pc_tip: str):
             print(f"Duplicity number!")
         else:
             list_of_guessed_numbers(user_tip=user_tip, pc_tip=pc_tip)
-        # byhodnocení tipu
+        # vyhodnocení tipu
         bull_data = evaluation_bulls(PC=pc_tip, user=user_tip)
         cow_dala = evaluation_cows(PC=pc_tip, user=user_tip,
                                    bull=bull_data)
